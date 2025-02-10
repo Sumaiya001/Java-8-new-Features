@@ -1,0 +1,171 @@
+📌 Default Methods in Java 8
+
+❓ Q1: What are Default Methods in Java 8?
+A: Default methods in Java 8 allow interfaces to have methods with implementations without breaking existing code. 
+This helps in adding new functionalities to interfaces while maintaining backward compatibility.
+
+❓ Q2: Why do we need Default Methods?
+A: Before Java 8, interfaces could only have abstract methods, meaning all methods had to be implemented by the implementing class.
+With default methods, we can add new methods to an interface without forcing existing implementations to modify their code.
+
+❓ Q3: How do we define a Default Method?
+A: A default method in an interface uses the default keyword and provides a method body.
+
+🔹 Example:
+interface Vehicle {
+    void start(); // Abstract method
+
+    // Default method with implementation
+    default void showBrand() {
+        System.out.println("This is a vehicle.");
+    }
+}
+
+class Car implements Vehicle {
+    public void start() {
+        System.out.println("Car started.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car();
+        myCar.start();       // Calls the implemented method
+        myCar.showBrand();   // Calls the default method from interface
+    }
+}
+🔹 Output:
+Car started.
+This is a vehicle.
+
+❓ Q4: Can a class override a default method?
+A: Yes! A class that implements the interface can override the default method.
+
+    default void showBrand() {
+        System.out.println("Default Vehicle Brand");
+    }
+}
+
+class Car implements Vehicle {
+    @Override
+    public void showBrand() {
+        System.out.println("Car Brand: Tesla");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car();
+        myCar.showBrand(); // Calls the overridden method in Car class
+    }
+}
+🔹 Output:
+Car Brand: Tesla
+Since Car overrides the showBrand() method, the overridden version is executed instead of the default method.
+
+❓ Q5: What happens if a class implements multiple interfaces with the same default method?
+A: If a class implements two interfaces that have the same default method, it must override the method to resolve ambiguity.
+
+🔹 Example (Multiple Interfaces Conflict):
+interface A {
+    default void show() {
+        System.out.println("Interface A");
+    }
+}
+
+interface B {
+    default void show() {
+        System.out.println("Interface B");
+    }
+}
+
+class C implements A, B {
+    @Override
+    public void show() {
+        System.out.println("Resolved Conflict: Class C");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        C obj = new C();
+        obj.show(); // Must override due to conflict
+    }
+}
+🔹 Output:
+Resolved Conflict: Class C
+Since both A and B provide a default method named show(), the class C must override the method to avoid ambiguity.
+
+❓ Q6: Can default methods call other methods inside the interface?
+A: Yes! A default method can call other default or static methods within the same interface.
+
+🔹 Example (Calling Another Default Method):
+interface Vehicle {
+    default void start() {
+        System.out.println("Vehicle is starting...");
+        checkEngine();
+    }
+
+    default void checkEngine() {
+        System.out.println("Checking engine...");
+    }
+}
+
+class Bike implements Vehicle {
+    // Inherits both default methods from Vehicle
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Bike myBike = new Bike();
+        myBike.start();
+    }
+}
+🔹 Output:
+
+✅ Summary of Default Methods
+Feature	Description
+         Default Method	A method in an interface with a body (default keyword)
+         Backward Compatibility	Allows adding new methods without breaking old implementations
+         Override Default Method	Implementing classes can override default methods
+         Multiple Interface Conflict	If two interfaces have the same default method, the class must override it
+         Calling Other Methods	Default methods can call other default or static methods
+
+
+🎯 When to Use Default Methods?
+
+To extend interfaces without breaking backward compatibility.
+To provide a default behavior for multiple classes.
+To avoid code duplication in multiple implementations.
+
+🚀 Java 8 default methods make interfaces more powerful and flexible.
+
+
+
+
+
+
+
+EXAMPLE:
+
+package java8Features.lambda;
+ interface Phone{
+	 void call();
+	  default void message() {
+			 System.out.println("sent");
+ 
+	 }
+ }
+ class Android implements Phone{
+	 public void call() {
+		 System.out.println("calling");
+	 }
+ }
+public class DemoInterface {
+	public static void main(String args[]) {
+		Phone p = new Android();
+		p.call();
+		p.message();
+	}
+
+}
